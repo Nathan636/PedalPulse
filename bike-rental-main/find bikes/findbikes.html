@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bike Rental</title>
+    <link rel="stylesheet" href="/find bikes/findbikes.css">
+</head>
+
+<body>
+    <!-- navbar -->
+    <nav class="navbar">
+        <div class="container1">
+            <div class="logo">
+                <img src="/img/giphy.gif" alt="Logo">
+            </div>
+            <div class="nav-links" id="navLinks">
+                <ul>
+                    <li><a href="/index.html">Home</a></li>
+                    <li><a href="/About us/about.html">About</a></li>
+                    <li><a href="/ContactUs/contact.html">Contact</a></li>
+                    <li><a href="/Review/review.html">Review</a></li>
+                    <li><a href="/blog page/blog.html">Blog</a></li>
+                    <li><a href="/DiscountCoupon/coupon.html">Offers</a></li>
+                    <li><a href="/ContactUs/dealersLogIn.html">Login/Register</a></li>
+                </ul>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+
+    <section class="bike-display">
+        <h1>Our Bike Collection</h1>
+        <div class="bike-container">
+            <!-- Bike Card Template -->
+            <!-- Repeat this block for each bike -->
+            <div class="bike-card">
+                <img src="/img/findbikes/bike1.jpeg" alt="Bike 1">
+                <div class="bike-info">
+                    <h2>Bike Model 1</h2>
+                    <p>Short description of Bike Model 1.</p>
+                    <button class="add-to-cart" onclick="addToCart('Bike Model 1', 100)">Add to Cart</button>
+                </div>
+            </div>
+            <div class="bike-card">
+                <img src="/img/findbikes/bike2.jpeg" alt="Bike 1">
+                <div class="bike-info">
+                    <h2>Bike Model 2</h2>
+                    <p>Short description of Bike Model 1.</p>
+                    <button class="add-to-cart" onclick="addToCart('Bike Model 1', 100)">Add to Cart</button>
+                </div>
+            </div>
+            <div class="bike-card">
+                <img src="/img/findbikes/bike3.jpeg" alt="Bike 1">
+                <div class="bike-info">
+                    <h2>Bike Model 3</h2>
+                    <p>Short description of Bike Model 1.</p>
+                    <button class="add-to-cart" onclick="addToCart('Bike Model 1', 100)">Add to Cart</button>
+                </div>
+            </div>
+            <div class="bike-card">
+                <img src="/img/findbikes/bike4.jpeg" alt="Bike 1">
+                <div class="bike-info">
+                    <h2>Bike Model 4</h2>
+                    <p>Short description of Bike Model 1.</p>
+                    <button class="add-to-cart" onclick="addToCart('Bike Model 1', 100)">Add to Cart</button>
+                </div>
+            </div>
+            <div class="bike-card">
+                <img src="/img/findbikes/bike5.jpeg" alt="Bike 1">
+                <div class="bike-info">
+                    <h2>Bike Model 5</h2>
+                    <p>Short description of Bike Model 1.</p>
+                    <button class="add-to-cart" onclick="addToCart('Bike Model 1', 100)">Add to Cart</button>
+                </div>
+            </div>
+            <div class="bike-card">
+                <img src="/img/findbikes/bike11.jpeg" alt="Bike 1">
+                <div class="bike-info">
+                    <h2>Bike Model 6</h2>
+                    <p>Short description of Bike Model 1.</p>
+                    <button class="add-to-cart" onclick="addToCart('Bike Model 1', 100)">Add to Cart</button>
+                </div>
+            </div>
+            <div class="bike-card">
+                <img src="/img/findbikes/bike12.jpeg" alt="Bike 1">
+                <div class="bike-info">
+                    <h2>Bike Model 7</h2>
+                    <p>Short description of Bike Model 1.</p>
+                    <button class="add-to-cart" onclick="addToCart('Bike Model 1', 100)">Add to Cart</button>
+                </div>
+            </div>
+            <div class="bike-card">
+                <img src="/img/findbikes/bike13.jpeg" alt="Bike 1">
+                <div class="bike-info">
+                    <h2>Bike Model 8</h2>
+                    <p>Short description of Bike Model 1.</p>
+                    <button class="add-to-cart" onclick="addToCart('Bike Model 1', 100)">Add to Cart</button>
+                </div>
+            </div>
+            <div class="bike-card">
+                <img src="/img/findbikes/bike23.jpeg" alt="Bike 1">
+                <div class="bike-info">
+                    <h2>Bike Model 9</h2>
+                    <p>Short description of Bike Model 1.</p>
+                    <button class="add-to-cart" onclick="addToCart('Bike Model 1', 100)">Add to Cart</button>
+                </div>
+            </div>
+            <!-- Repeat above block for bikes 2 to 10 -->
+        </div>
+    </section>
+
+    <section class="cart" id="cartSection">
+        <h2>Cart</h2>
+        <div id="cartItems"></div>
+        <div id="cartTotal">
+            <p>Total Amount: $<span id="totalAmount">0</span></p>
+            <p id="discountMessage"></p>
+            <button class="book-now" id="bookNowButton" onclick="proceedToCheckout()" disabled>Book Now</button>
+        </div>
+    </section>
+
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Enter Your Details</h2>
+            <form id="checkoutForm">
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" required>
+                <label for="contact">Phone Number or Email:</label>
+                <input type="text" id="contact" name="contact" required>
+                <label for="payment">Payment Method:</label>
+                <select id="payment" name="payment" required>
+                    <option value="upi">UPI</option>
+                    <option value="phonepe">PhonePe</option>
+                    <option value="paytm">Paytm</option>
+                    <option value="cod">Cash on Delivery</option>
+                </select>
+                <button type="submit">Complete Booking</button>
+            </form>
+        </div>
+    </div>
+
+
+
+      <!-- script for navbar hamburger menu -->
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('mobile');
+            });
+        });
+
+    </script>
+
+    <script>
+        let cart = [];
+        let totalAmount = 0;
+
+        function addToCart(bikeName, price) {
+            cart.push({ name: bikeName, price: price });
+            updateCart();
+        }
+
+        function updateCart() {
+            const cartItems = document.getElementById('cartItems');
+            const totalAmountElem = document.getElementById('totalAmount');
+            const discountMessageElem = document.getElementById('discountMessage');
+            const bookNowButton = document.getElementById('bookNowButton');
+
+            cartItems.innerHTML = '';
+            totalAmount = 0;
+
+            cart.forEach(item => {
+                totalAmount += item.price;
+                cartItems.innerHTML += `<p>${item.name} - $${item.price}</p>`;
+            });
+
+            let discount = 0;
+            if (localStorage.getItem('firstTime') !== 'false') {
+                discount = totalAmount * 0.4;
+                totalAmount -= discount;
+                localStorage.setItem('firstTime', 'false');
+            }
+
+            totalAmountElem.textContent = totalAmount.toFixed(2);
+            discountMessageElem.textContent = discount ? `Discount Applied: $${discount.toFixed(2)}` : '';
+            bookNowButton.disabled = cart.length === 0;
+        }
+
+        function proceedToCheckout() {
+            if (cart.length === 0) return;
+            document.getElementById('checkoutModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('checkoutModal').style.display = 'none';
+        }
+
+        document.getElementById('checkoutForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const address = document.getElementById('address').value;
+            const contact = document.getElementById('contact').value;
+            const paymentMethod = document.getElementById('payment').value;
+
+            localStorage.setItem('order', JSON.stringify({
+                address: address,
+                contact: contact,
+                paymentMethod: paymentMethod,
+                cart: cart,
+                totalAmount: totalAmount
+            }));
+
+            alert('Booking Successful!');
+            setTimeout(() => {
+                window.location.href = '/index.html';
+            }, 4000);
+        });
+
+        function toggleMenu() {
+            document.querySelector('.navbar').classList.toggle('active');
+        }
+
+    </script>
+
+</body>
+
+</html>

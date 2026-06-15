@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent Bikes in mumbai</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+    <script src="script.js"></script>
+
+</head>
+
+<body>
+
+    <!-- navbar -->
+    <nav class="navbar">
+        <div class="Container">
+            <div class="Logo">
+                <img src="img/giphy.gif" alt="Logo">
+            </div>
+            <div class="nav-links" id="navLinks">
+                <ul>
+                    <li><a href="/index.html" class="active">Home</a></li>
+                    <li><a href="/ridestrack/ridetrack1.html" class="active">Track Ride</a></li>
+                    <li><a href="/About us/about.html" class="active">About</a></li>
+                    <li><a href="/ContactUs/contact.html" class="active">Contact</a></li>
+                    <li><a href="/Review/review.html" class="active">Review</a></li>
+                    <li><a href="/ContactUs/dealersLogIn.html" class="active">Login</a></li>
+                    
+                </ul>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Booking page --> 
+     <section id="CONT">
+    <div class="container3">
+        <h1>PEDALPULSE</h1>
+        <div class="form-group">
+            <label for="city">City</label>
+            <select id="city">
+                <option value="">Select pickup location</option>
+                <option value="city1">Dahisar</option>
+                <option value="city2">Borivali</option>
+                <option value="city2">Dadar</option>
+                <option value="city2">Malad</option>
+                <option value="city2">Khar</option>
+                <option value="city2">Bandra</option>
+
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="bookDate">Book Date</label>
+            <input type="date" id="bookDate">
+        </div>
+        <div class="form-group">
+            <label for="dropOffDate">Drop Off Date</label>
+            <input type="date" id="dropOffDate">
+        </div>
+        <div class="form-group">
+            <label for="time">Pick Up Time</label>
+            <input type="time" id="time">
+        </div>
+        <div class="form-group">
+            <label for="Time">Drop Off Time</label>
+            <input type="time" id="Time">
+        </div>
+        <button id="findBikeBtn" class="btn2" disabled>Find Bike</button>
+
+        <div id="bikeList" class="bike-list" style="display:none;">
+            <!-- Bike items will be injected here -->
+        </div>
+
+        <div id="cartSummary" class="cart-summary" style="display:none;">
+            <h3>Cart Summary</h3>
+            <div id="cartItems"></div>
+            <p>Total Amount: <span id="totalAmount">0</span> INR</p>
+            <p>Discount: <span id="discount">0</span>%</p>
+            <button id="proceedToCheckout" class="btn">Proceed to Checkout</button>
+        </div>
+
+        <div id="checkoutForm" class="checkout-form" style="display:none;">
+            <h3>Checkout</h3>
+            <form id="checkout">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="paymentMethod">Payment Method</label>
+                    <select id="paymentMethod">
+                        <option value="cash">Cash</option>
+                        <option value="upi">UPI</option>
+                        <option value="debitCard">Debit Card</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="proofMethod">Proof of Identity </label>
+                    <select id="proofMethod">
+                        <option value="Aadhar card">Aadhar card</option>
+                        <option value="pan card">Pan card</option>
+                        <input type="number" id="Proof" required>
+                    </select>
+                </div>
+                <button type="submit" class="btn" id="bookNowBtn">Book Now</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+
+
+<Script>
+    // Get the Book Now button
+document.getElementById('checkout').addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent the default form submission
+
+    // Show confirmation dialog
+    Swal.fire({
+        title: 'Booking Successful!',
+        text: 'Would you like to track your ride?',
+        icon: 'success',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, track my ride!',
+        cancelButtonText: 'No, thanks'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // If user clicks "Yes", redirect to tracking page
+            window.location.href = '/ridestrack/ridetrack1.html';
+        } else {
+            // If user clicks "No", redirect to home page
+            window.location.href = 'index.html';
+        }
+    });
+
+    // Optional: You can also save the booking details here
+    saveBookingDetails();
+});
+
+function saveBookingDetails() {
+    // Get form values
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
+    const paymentMethod = document.getElementById('paymentMethod').value;
+    const proofMethod = document.getElementById('proofMethod').value;
+
+    // Create booking object
+    const bookingDetails = {
+        name,
+        email,
+        phone,
+        address,
+        paymentMethod,
+        proofMethod,
+        bookingDate: new Date().toISOString(),
+        // Add any other relevant booking details
+    };
+
+    // Save to localStorage (you can modify this to save to a database instead)
+    localStorage.setItem('currentBooking', JSON.stringify(bookingDetails));
+}
+</Script>
+  
+
+    <!-- hero -->
+    <section class="benefits">
+        <h2>Benefits of Choosing Self Drive Bicycle in mumbai</h2>
+        <div class="benefit-items">
+            <div class="benefit-item">
+                <img src="/img/icon/route.jpg" alt="No Riding Limits">
+                <h3>No Riding Limits</h3>
+                <p>Odometer Won't Scare You Anymore.</p>
+            </div>
+            <div class="benefit-item">
+                <img src="/img/icon/helmet.jpg" alt="Freebies">
+                <h3>Freebies</h3>
+                <p>Helmets Always, Sometimes More.</p>
+            </div>
+            <div class="benefit-item">
+                <img src="/img/icon/secure-payment.jpg" alt="Secure Payments">
+                <h3>Secure Payments</h3>
+                <p>Our Payment Partners are Industry Leaders.</p>
+            </div>
+            
+            
+        </div>
+    </section>
+
+    <!-- csutomer expr button -->
+    <div class="button-container">
+        <p id="expr">See Customer Experience</p>
+        <button id="experience-btn">See Customer Experience</button>
+    </div>
+
+    
+
+    <!-- How to rent a bike -->
+    <div class="container1">
+        <h1>How to Rent a Bike in Mumbai ?</h1>
+        <div class="steps">
+            <div class="step">
+                <img src="/img/how to rent/key.jpg" alt="Bike Icon">
+                <h2>Select Your Bike</h2>
+                <p>You can search & select bike from our wide range</p>
+            </div>
+            <div class="step">
+                <img src="/img/how to rent/pick-up.jpg" alt="Location Icon">
+                <h2>Pick Your Bike</h2>
+                <p>Find the pickup location & pick a bike</p>
+            </div>
+            <div class="step">
+                <img src="/img/how to rent/select-to-cart.jpg" alt="Cart Icon">
+                <h2>Add to Cart</h2>
+                <p>Easily add multiple bikes in your cart or checkout from "Rent Now"</p>
+            </div>
+            
+            <div class="step">
+                <img src="/img/how to rent/ride-your-bike.jpg" alt="Map Icon">
+                <h2>Ride Anywhere</h2>
+                <p>We do not have fixed limits</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Rent by in -> city name -->
+    <div id="header1">
+        <h1>Bike Rental Services in Top Cities</h1>
+    </div>
+    <section class="city-list">
+        <div class="city">
+            <img src="/img/bikeRentCity/mumbai.png" alt="mumbai">
+            <p>mumbai</p>
+        </div>
+        <div class="city">
+            <img src="/img/bikeRentCity/delhi.png" alt="delhi">
+            <p>delhi</p>
+        </div>
+        <div class="city">
+            <img src="/img/bikeRentCity/bangalore.png" alt="bangalore">
+            <p>bangalore</p>
+        </div>
+ 
+    </section>
+
+
+    <!-- Who We Are Page -->
+    <div class="container2">
+        <h1>What Do You Know About Us?</h1>
+        <p> Pedal Pulse offers a seamless, eco-friendly solution for urban mobility, providing users with easy access to bicycles through a user-friendly app. Our goal is to promote sustainable transport, reduce carbon footprints, and enhance convenience for city commuters. With future expansions and added features, Pedal Pulse is set to revolutionize urban travel.</p>  
+
+        <p>Travellers with a spirit governed by an intense passion for riding different bikes, Cars, and Bicycles have
+            just landed in the right place. 
+           </p>
+        <p>We are regarded as one of the best rental companies in India due to our personalized service and higher
+            commitment levels. </p>
+        <div class="buttons">
+          
+            <a href="/ContactUs/contact.html"><button class="contact-us">Contact Us</button></a>
+        </div>
+    </div>
+     <!--PROFILE -->
+     
+
+    <script src="script.js"></script>
+
+    
+
+
+    <!-- Blog Page -->
+    <div class="blog-container">
+        <h1>Recent Blog Post</h1>
+        <div class="blog-post">
+            <div class="blog-info">
+                <span>Category</span> rent Bike |
+                <span>Date</span> 24 oct, 24 |
+                <span>By</span> harris pereira|
+            </div>
+            <img src="/img/findbikes/bike10.jpeg" alt="Safer Driving">
+            <h3></h3>
+            <p>"I had an amazing experience renting a bike from this place! The staff was friendly and helpful, 
+                ensuring I chose the right bike for my needs. The bike itself was in perfect condition—gears shifted smoothly, and the brakes were reliable. 
+                I rode it all day without any issues and was even given a helmet and lock free of charge. 
+                Will definitely rent from here again on my next trip!"</p>
+            
+        </div>
+        <div class="blog-post">
+            <div class="blog-info">
+                <span>Category</span> Rent Bike |
+                <span>Date</span> 12 oct, 24 |
+                <span>By</span> joshua pereira |
+                
+
+
+            </div>
+            <img src="/img/findbikes/bike12.jpeg" alt="Bike Riding">
+            <h3>Comprehensive Bike Riding Guide For New Learners</h3>
+            <p>"The rental process was straightforward, and the rates were decent, but the bike could have been in better shape. 
+                It seemed a bit old, and the seat was uncomfortable after a couple of hours. 
+                I appreciated the helmet and lock that came with it, but I wish they did a bit more maintenance. Overall, it was a decent experience, but there's room for improvement!"
+
+            </p>
+            
+        </div>
+        
+    </div>
+
+
+
+    <!-- Footer Section -->
+    <footer>
+        
+        </div>
+        <div class="footer-bottom">
+            <p>Copyrights © 2024 PEDALPULSE Pvt Ltd</p>
+
+        </div>
+    </footer>
+
+   
+
+
+    <!-- script for navbar hamburger menu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('mobile');
+            });
+        });
+    </script>
+
+    <!-- customer expr btn -->
+    <script>
+        document.getElementById('experience-btn').addEventListener('click', function () {
+            window.location.href = '/Review/review.html';
+        });
+    </script>
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>

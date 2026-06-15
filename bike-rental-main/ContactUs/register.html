@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - PedalPulse</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="../supabase-client.js"></script>
+</head>
+<body>
+    <!-- navbar -->
+    <nav class="navbar">
+        <div class="Container">
+            <div class="Logo">
+                <img src="../img/giphy.gif" alt="Logo">
+            </div>
+            <div class="nav-links" id="navLinks">
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../ridestrack/ridetrack1.html">Track Ride</a></li>
+                    <li><a href="../About us/about.html">About</a></li>
+                    <li><a href="../ContactUs/contact.html">Contact</a></li>
+                    <li><a href="../Review/review.html">Review</a></li>
+                    <li><a href="../ContactUs/dealersLogIn.html">Login</a></li>
+                </ul>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Registration Form -->
+    <section class="registration-section">
+        <div class="container">
+            <h1>Create an Account</h1>
+            <form id="registrationForm" class="registration-form">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea id="address" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="idProof">ID Proof Type</label>
+                    <select id="idProof" required>
+                        <option value="">Select ID Proof</option>
+                        <option value="aadhar">Aadhar Card</option>
+                        <option value="pan">PAN Card</option>
+                        <option value="driving">Driving License</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="idNumber">ID Proof Number</label>
+                    <input type="text" id="idNumber" required>
+                </div>
+                <button type="submit" class="btn">Register</button>
+            </form>
+            <p class="login-link">Already have an account? <a href="dealersLogIn.html">Login here</a></p>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Get form values
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const address = document.getElementById('address').value;
+            const idProof = document.getElementById('idProof').value;
+            const idNumber = document.getElementById('idNumber').value;
+
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Passwords do not match',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            try {
+                // First, sign up the user with Supabase Auth
+                const { data: authData, error: authError } = await window.supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            full_name: fullName,
+                            phone,
+                            address,
+                            id_proof: idProof,
+                            id_number: idNumber
+                        }
+                    }
+                });
+
+                if (authError) throw authError;
+
+                // Then, create the user profile in the users table
+                const { data: profileData, error: profileError } = await window.supabase
+                    .from('users')
+                    .insert([{
+                        id: authData.user.id, // Use the auth user's ID
+                        email,
+                        full_name: fullName,
+                        phone_number: phone,
+                        address,
+                        id_proof: idProof,
+                        id_number: idNumber,
+                        created_at: new Date().toISOString()
+                    }])
+                    .select();
+
+                if (profileError) throw profileError;
+
+                // Show success message
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Registration successful! Please check your email to verify your account.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    // Redirect to login page
+                    window.location.href = 'dealersLogIn.html';
+                });
+
+            } catch (error) {
+                console.error('Registration error:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: error.message || 'Failed to register. Please try again.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

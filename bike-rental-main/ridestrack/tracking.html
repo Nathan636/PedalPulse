@@ -1,0 +1,114 @@
+<head>
+    <link rel="stylesheet" href="tp.css">
+</head>
+<body>
+    <div class="map">
+        <h1 class="text-center">Get directions for your ride!</h1>
+        <br>
+        <div class="container">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Current Location" id="start">
+                <input type="text" class="form-control" placeholder="Destination Location" id="dest">
+            </div>
+            <button class="btn btn-secondary" onclick="startNavigation()">Start Navigation</button>
+            <button class="btn-end-ride" onclick="endNavigation()">End Ride</button>
+            <div id="map" style="width: 100%; height: 400px; margin-top: 20px;"></div>
+            <p id="eta" style="margin-top: 20px; font-weight: bold;"></p> <!-- ETA Display -->
+        </div>
+    </div>
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="custom-modal" id="completionModal">
+        <h2 class="modal-title">🎉 Ride Completed!</h2>
+        <p>Thank you for riding with us. Would you like to share your experience?</p>
+        <button class="modal-button" onclick="goToReview()">Leave a Review</button>
+    </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDN_c_kIVQSjAa6o4cO1otMNFFOncH4niU&libraries=places"></script>
+    <script>
+        let map, directionsService, directionsRenderer;
+        let startAutocomplete, destAutocomplete;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 19.3852, lng: 72.8334 },
+                zoom: 13
+            });
+            
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsRenderer.setMap(map);
+
+            startAutocomplete = new google.maps.places.Autocomplete(document.getElementById("start"));
+            destAutocomplete = new google.maps.places.Autocomplete(document.getElementById("dest"));
+        }
+
+        function startNavigation() {
+            const start = document.getElementById("start").value;
+            const destination = document.getElementById("dest").value;
+            if (!start || !destination) {
+                alert("Please enter both start and destination locations.");
+                return;
+            }
+            
+            const geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ 'address': start }, function(startResults, startStatus) {
+                if (startStatus === 'OK') {
+                    geocoder.geocode({ 'address': destination }, function(destResults, destStatus) {
+                        if (destStatus === 'OK') {
+                            const startLocation = startResults[0].geometry.location;
+                            const destinationLocation = destResults[0].geometry.location;
+                            
+                            updateRoute(startLocation, destinationLocation);
+                        } else {
+                            alert("Destination location could not be found: " + destStatus);
+                        }
+                    });
+                } else {
+                    alert("Start location could not be found: " + startStatus);
+                }
+            });
+        }
+
+        function updateRoute(startLocation, destinationLocation) {
+            const request = {
+                origin: startLocation,
+                destination: destinationLocation,
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+            
+            directionsService.route(request, function(result, status) {
+                if (status == google.maps.DirectionsStatus.OK) {
+                    directionsRenderer.setDirections(result);
+                    
+                    const route = result.routes[0];
+                    const leg = route.legs[0];
+                    document.getElementById("eta").innerText = `Estimated Time of Arrival: ${leg.duration.text}`;
+                } else {
+                    console.error("Could not update directions: " + status);
+                }
+            });
+        }
+
+        function endNavigation() {
+            directionsRenderer.setDirections({ routes: [] });
+            document.getElementById("eta").innerText = "";
+            showCompletionModal();
+        }
+
+        function showCompletionModal() {
+            document.getElementById('modalOverlay').style.display = 'block';
+            document.getElementById('completionModal').style.display = 'block';
+        }
+
+        function goToReview() {
+            window.location.href = '/Review/review.html';
+        }
+
+        document.getElementById('modalOverlay').onclick = function() {
+            document.getElementById('modalOverlay').style.display = 'none';
+            document.getElementById('completionModal').style.display = 'none';
+        };
+
+        window.onload = initMap;
+    </script>
+</body>

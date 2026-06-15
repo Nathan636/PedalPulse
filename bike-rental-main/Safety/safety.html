@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safety - Bike Rental</title>
+    <link rel="stylesheet" href="/Safety/safety.css">
+</head>
+
+<body>
+    <!-- navbar -->
+    <nav class="navbar">
+        <div class="Container">
+            <div class="Logo">
+                <img src="/img/giphy.gif" alt="Logo">
+            </div>
+            <div class="nav-links" id="navLinks">
+                <ul>
+                    <li><a href="/index.html">Home</a></li>
+                    <li><a href="/About us/about.html">About</a></li>
+                    <li><a href="/ContactUs/contact.html">Contact</a></li>
+                    <li><a href="/Review/review.html">Review</a></li>
+                    <li><a href="/blog page/blog.html">Blog</a></li>
+                    <li><a href="/DiscountCoupon/coupon.html">Offers</a></li>
+                    <li><a href="/ContactUs/dealersLogIn.html">Login/Register</a></li>
+                </ul>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+    <!-- Safety Section -->
+    <section class="safety-section">
+        <h1>Safety Guidelines</h1>
+        <p>Your safety is our top priority. Please review the following guidelines to ensure a safe and enjoyable ride.
+        </p>
+
+        <div class="safety-rules">
+            <h2>1. Wear a Helmet</h2>
+            <p>Always wear a helmet while riding to protect yourself from potential head injuries.</p>
+
+            <h2>2. Follow Traffic Rules</h2>
+            <p>Adhere to all traffic laws, signals, and signs. Be mindful of pedestrians and other vehicles on the road.
+            </p>
+
+            <h2>3. Inspect the Bike Before Riding</h2>
+            <p>Check the brakes, tires, and lights before starting your ride. Report any issues to us immediately.</p>
+
+            <h2>4. Ride Within Your Limits</h2>
+            <p>Do not attempt risky maneuvers or ride in conditions beyond your skill level.</p>
+
+            <h2>5. Stay Visible</h2>
+            <p>Wear bright or reflective clothing, especially when riding at night or in low-visibility conditions.</p>
+
+            <h2>6. Keep Both Hands on the Handlebars</h2>
+            <p>Always keep both hands on the handlebars, except when signaling a turn.</p>
+        </div>
+    </section>
+
+        <!-- Footer Section -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-links">
+                    <div class="column">
+                        <a href="/About us/about.html">About Freedom Cycles</a>
+                        <a href="/WhyFreedomCycles/why.html">Why Freedom Cycles?</a>
+                        <a href="/HowWork/howWork.html">How Rentrip Works</a>
+                        <a href="/PaymentSecurity/payment.html">Payment and Security</a>
+                        <a href="/TermsCondtions/terms.html">Terms and Conditions</a>
+                        <a href="/PrivacyPolicy/privacy.html">Privacy Policy</a>
+                    </div>
+                    <div class="column">
+                        <a href="/PartnetWithUs/partner.html">Partner with Us</a>
+                        <a href="/TermsOfUse/termsUse.html">Terms of Use</a>
+                        <a href="/Safety/safety.html">Safety</a>
+                        <a href="/DiscountCoupon/coupon.html">Discount Coupons</a>
+                        <a href="/support/support.html">Support</a>
+                        <a href="/ContactUs/contact.html">Contact Us</a>
+                    </div>
+                    <div class="column">
+                        <p>Mail</p>
+                        <a href="mailto:email@example.com">Email Us</a>
+                        <p>Call us</p>
+                        <a href="tel:+918800779391">+91 88007 79391</a>
+                    </div>
+                    <div class="column">
+                        <p>Download the Rentrip App</p>
+                        <a href="#"><img src="/img/android.jpg" alt="Google Play"></a>
+                        <a href="#"><img src="/img/ios.jpg" alt="App Store"></a>
+                    </div>
+                </div>
+                <div class="social-media">
+                    <a href=""> <i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/aman.js.07?igsh=ZTE2czh4emxxMHMz"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="#"> <i class="fab fa-twitter"></i></a>
+                    <a
+                        href="https://www.linkedin.com/in/samirul-islam-8692862a8?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app "><i
+                            class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/samirulcodes"><i class="fa-solid fa-code-branch"></i></a>
+    
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Copyrights © 2024 Freedom Cycles Pvt Ltd</p>
+    
+            </div>
+        </footer>
+
+
+    <!-- script for navbar hamburger menu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('mobile');
+            });
+        });
+    </script>
+
+</body>
+
+</html>
